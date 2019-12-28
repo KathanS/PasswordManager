@@ -1,6 +1,7 @@
 package com.example.passwordmanager;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +24,7 @@ public class EditDataActivity extends AppCompatActivity {
 
     private String selectedName;
     private String selectedName2;
-    private int selectedID,selectedID2;
+    private int selectedID; //,selectedID2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,19 +39,34 @@ public class EditDataActivity extends AppCompatActivity {
 
         //get the intent extra from the ListDataActivity
         Intent receivedIntent = getIntent();
-        Intent receivedIntent2 = getIntent();
+
 
         //now get the itemID we passed as an extra
         selectedID = receivedIntent.getIntExtra("id",-1); //NOTE: -1 is just the default value
-        selectedID2 = receivedIntent2.getIntExtra("id",-1); //NOTE: -1 is just the default value
+
 
         //now get the name we passed as an extra
         selectedName = receivedIntent.getStringExtra("name");
-        selectedName2 = receivedIntent2.getStringExtra("code");
+        selectedName2 = receivedIntent.getStringExtra("code");
+
+        //System.out.println(selectedName2);
 
         //set the text to show the current selected name
         editable_item.setText(selectedName);
-        password.setText(selectedName2);
+        Cursor data= mDatabaseHelper2.getData();
+
+        int n =selectedID-1;
+
+        for(int j=0;j<selectedID;j++)
+        data.moveToNext();
+
+        //String id = data.getString(selectedID);
+
+        final String k = data.getString(1);
+
+        password.setText(k);
+
+        //password.setText(id);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +79,7 @@ public class EditDataActivity extends AppCompatActivity {
                 }
                 String item2 = password.getText().toString();
                 if(!item.equals("")){
-                    mDatabaseHelper2.updateCode(item2,selectedID2,selectedName2);
+                    mDatabaseHelper2.updateCode(item2,selectedID,k);
                 }else{
                     toastMessage("You must enter a password");
                 }
@@ -76,7 +92,7 @@ public class EditDataActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mDatabaseHelper.deleteName(selectedID,selectedName);
                 editable_item.setText("");
-                mDatabaseHelper2.deleteCode(selectedID2,selectedName2);
+                mDatabaseHelper2.deleteCode(selectedID,k);
                 password.setText("");
                 toastMessage("removed from database");
             }

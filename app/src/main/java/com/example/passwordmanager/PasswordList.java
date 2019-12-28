@@ -12,12 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class PasswordList extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "PasswordList";
 
     DatabaseHelper mDatabaseHelper;
     DatabaseHelper2 mDatabaseHelper2;
     private Button btnAdd, btnViewData;
     private EditText editText,editText2;
+    private String newEntry2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class PasswordList extends AppCompatActivity {
                 } else {
                     toastMessage("You must put something in the text field!");
                 }
-                String newEntry2 = editText2.getText().toString();
+                newEntry2 = editText2.getText().toString();
                 if (editText2.length() != 0) {
                     AddData2(newEntry2);
                     editText2.setText("");
@@ -56,8 +57,9 @@ public class PasswordList extends AppCompatActivity {
         btnViewData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PasswordList.this, ListDataActivity.class);
-                startActivity(intent);
+                Intent editScreenIntent = new Intent(PasswordList.this, ListDataActivity.class);
+                editScreenIntent.putExtra("code",newEntry2);
+                startActivity(editScreenIntent);
             }
         });
 
@@ -72,8 +74,8 @@ public class PasswordList extends AppCompatActivity {
             toastMessage("Something went wrong");
         }
     }
-    public void AddData2(String newEntry) {
-        boolean insertData = mDatabaseHelper2.addData(newEntry);
+    public void AddData2(String newEntry2) {
+        boolean insertData = mDatabaseHelper2.addData(newEntry2);
 
         if (insertData) {
             toastMessage("Data Successfully Inserted!");

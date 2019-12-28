@@ -23,7 +23,7 @@ public class ListDataActivity extends AppCompatActivity {
     private static final String TAG = "ListDataActivity";
 
     DatabaseHelper mDatabaseHelper;
-    DatabaseHelper2 mDatabaseHelper2;
+    String selectedCode;
 
     private ListView mListView;
 
@@ -31,9 +31,12 @@ public class ListDataActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_layout);
-        mListView = (ListView) findViewById(R.id.listView);
+        mListView =  findViewById(R.id.listView);
         mDatabaseHelper = new DatabaseHelper(this);
-        mDatabaseHelper2 = new DatabaseHelper2(this);
+
+        Intent receivedIntent = getIntent();
+        selectedCode = receivedIntent.getStringExtra("code");
+
 
         populateListView();
 
@@ -62,13 +65,13 @@ public class ListDataActivity extends AppCompatActivity {
 
         //get the data and append to a list
         Cursor data = mDatabaseHelper.getData();
-        Cursor data2 = mDatabaseHelper2.getData();
+
         ArrayList<String> listData = new ArrayList<>();
         while(data.moveToNext()){
             //get the value from the database in column 1
             //then add it to the ArrayList
             listData.add(data.getString(1));
-            data2.moveToNext();
+
         }
         //create the list adapter and set the adapter
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
@@ -82,17 +85,19 @@ public class ListDataActivity extends AppCompatActivity {
                 Log.d(TAG, "onItemClick: You Clicked on " + name);
 
                 Cursor data = mDatabaseHelper.getItemID(name); //get the id associated with that name
-                Cursor data2 = mDatabaseHelper2.getItemID(name);
+
                 int itemID = -1;
+
                 while(data.moveToNext()){
                     itemID = data.getInt(0);
-                    data2.moveToNext();
+
                 }
                 if(itemID > -1){
                     Log.d(TAG, "onItemClick: The ID is: " + itemID);
                     Intent editScreenIntent = new Intent(ListDataActivity.this, EditDataActivity.class);
                     editScreenIntent.putExtra("id",itemID);
                     editScreenIntent.putExtra("name",name);
+                    editScreenIntent.putExtra("code",selectedCode);
                     startActivity(editScreenIntent);
                 }
                 else{
