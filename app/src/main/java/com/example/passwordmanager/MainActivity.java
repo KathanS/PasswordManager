@@ -19,8 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
         private SharedPreferences.Editor mEditor;
 
         private EditText name,password;
-        private Button btn;
+        private Button btn,btnAc;
         private CheckBox box;
+
+
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +33,20 @@ import androidx.appcompat.app.AppCompatActivity;
             password = findViewById(R.id.password);
 
             btn = findViewById(R.id.btn);
+            btnAc = findViewById(R.id.btnAc);
 
             box = findViewById(R.id.box);
 
             mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             mEditor = mPreferences.edit();
+
+            String tookN = mPreferences.getString("loginName","");
+            String tookP = mPreferences.getString("loginPassword","");
+
+            if(!tookN.equals("") && !tookP.equals(""))
+                btnAc.setEnabled(false);
+
+
 
             check();
 
@@ -68,9 +79,34 @@ import androidx.appcompat.app.AppCompatActivity;
 
                     }
 
-                    Intent intent = new Intent(MainActivity.this,ListDataActivity.class);
-                    startActivity(intent);
+                    //verification
 
+                    int flag=0;
+
+                    if((name.getText().toString().equals(mPreferences.getString("loginName","kathan"))) && (password.getText().toString().equals(mPreferences.getString("loginPassword","kathan"))) )
+                        flag=1;
+
+
+
+
+                    if(flag==1)
+                    {
+                        Intent intent = new Intent(MainActivity.this,ListDataActivity.class);
+                        startActivity(intent);
+                    }
+
+
+                }
+            });
+
+
+
+
+            btnAc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this,set_password.class);
+                    startActivity(intent);
                 }
             });
 
