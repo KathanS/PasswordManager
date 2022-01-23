@@ -11,3 +11,5 @@ Made my first android application in java, December 2019.
 ![ss5](/Screenshots/ss5.png)
 ![ss6](/Screenshots/ss6.png)
 ![ss7](/Screenshots/ss7.png)
+
+Application has some performance issues.
