@@ -12,4 +12,4 @@ Made my first android application in java, December 2019.
 ![ss6](/Screenshots/ss6.png)
 ![ss7](/Screenshots/ss7.png)
 
-Application has some performance issues.
+Application has some performance issues, I have done this project - only for learning purpose.
